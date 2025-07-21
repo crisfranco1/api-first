@@ -4,12 +4,12 @@ info:
   version: 1.0.0
   description: User management API
 servers: 
-  - url: http://localhost:300
+  - url: http://localhost:3000
 paths:
-  /hello
+  /hello:
     get:
       summary: Hello World
-      responses
+      responses:
         '200':
           description: A successful response
           content:
