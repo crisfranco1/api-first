@@ -9,6 +9,53 @@ components:
   schemas:
     HelloResponse:
       type: object  
+    Product:
+      type: object
+      required:
+        - name
+        - price
+        - category
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 40
+        description:
+          type: string
+          maxLength: 500
+        price:
+          type: number
+          minimum: 0
+          multipleOf: 0.01
+        category:
+          type: string
+          enum: [electronics, books, clothes, food]
+        tags:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        inStock:
+          type: boolean
+        specifications:
+          type: object
+          additionalProperties:
+            type: string
+        ratings:
+          type: array
+          items:
+            type: object
+            required:
+              - score
+              - comment
+            properties:
+              score:
+                type: number
+                minimum: 0
+                maximum: 5
+              comment:
+                type: string
+                maxLength: 200
 paths:
   /hello:
     get:
@@ -20,6 +67,117 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HelloResponse'
+  /products:
+    post:
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    get:
+      summary: Get all products
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /products/{id}:
+    get:
+      summary: Get product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    put:
+      summary: Update product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    delete:
+      summary: Delete product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Product deleted successfully
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
   /users:
     post:
       summary: Create a new user
@@ -59,9 +217,93 @@ paths:
                     type: integer
                   email:
                     type: string
-
-
-
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+    put:
+      summary: Update user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - age
+                - email
+              properties:
+                name:
+                  type: string
+                  minLength: 2
+                age:
+                  type: integer
+                  minimum: 18
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  age:
+                    type: integer
+                  email:
+                    type: string
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+            
+  
 
 
 

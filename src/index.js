@@ -39,6 +39,103 @@ app.post('/users', (req, res) => {
     res.status(201).json(newUser);
 });
 
+
+const users = [
+    { id: 1, name: 'John Doe', age: 30, email: 'john@example.com' },
+    { id: 2, name: 'Jane Franco', age: 25, email: 'jane@example.com' },
+    { id: 3, name: 'Alice Garcia', age: 28, email: 'alice@example.com' }
+];
+
+app.get('/users/:id', (req, res) => {
+    const userId = parseInt(req.params.id);
+    const user = users.find(u => u.id === userId);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({
+        id: user.id,
+        name: user.name
+    });
+});
+
+
+app.put('/users/:id', (req, res) => {
+    const userId = parseInt(req.params.id);
+    const { name, age, email } = req.body;
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex === -1) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    const updatedUser = { id: userId, name, age, email };
+    users[userIndex] = updatedUser;
+    res.json(updatedUser);
+});
+
+let products = [
+    {
+        id: '1',
+        name: 'Laptop',
+        description: 'A powerful laptop',
+        price: 1200.00,
+        category: 'electronics',
+        tags: ['portable', 'tech'],
+        inStock: true,
+        specifications: { brand: 'BrandX', color: 'silver' },
+        ratings: [{ score: 4.5, comment: 'Great!' }]
+    },
+    {
+        id: '2',
+        name: 'Book',
+        description: 'A good book',
+        price: 20.00,
+        category: 'books',
+        tags: ['reading'],
+        inStock: true,
+        specifications: { author: 'AuthorY' },
+        ratings: [{ score: 5, comment: 'Excellent read' }]
+    }
+];
+
+app.post('/products', (req, res) => {
+    const newProduct = {
+        id: Date.now().toString(),
+        ...req.body
+    };
+    products.push(newProduct);
+    res.status(201).json(newProduct);
+});
+
+app.get('/products', (req, res) => {
+    res.json(products);
+});
+
+app.get('/products/:id', (req, res) => {
+    const product = products.find(p => p.id === req.params.id);
+    if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+    }
+    res.json(product);
+});
+
+app.put('/products/:id', (req, res) => {
+    const productIndex = products.findIndex(p => p.id === req.params.id);
+    if (productIndex === -1) {
+        return res.status(404).json({ message: 'Product not found' });
+    }
+    const updatedProduct = { id: req.params.id, ...req.body };
+    products[productIndex] = updatedProduct;
+    res.json(updatedProduct);
+});
+
+app.delete('/products/:id', (req, res) => {
+    const productIndex = products.findIndex(p => p.id === req.params.id);
+    if (productIndex === -1) {
+        return res.status(404).json({ message: 'Product not found' });
+    }
+    products.splice(productIndex, 1);
+    res.status(204).send();
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
