@@ -49,27 +49,37 @@ components:
           type: string
           minLength: 2
           maxLength: 40
+          example: "Apple iPhone 15 Pro"
         description:
           type: string
           maxLength: 500
+          example: "The latest Apple iPhone 15 Pro features a 6.1-inch Super Retina XDR display, A17 Pro chip, triple camera system, and all-day battery life."
         price:
           type: number
           minimum: 0
           multipleOf: 0.01
+          example: 1199.99
         category:
           type: string
           enum: [electronics, books, clothes, food]
+          example: electronics
         tags:
           type: array
           items:
             type: string
           minItems: 1
+          example: ["smartphone", "apple", "ios"]
         inStock:
           type: boolean
+          example: true
         specifications:
           type: object
           additionalProperties:
             type: string
+          example:
+            color: "Natural Titanium"
+            storage: "256GB"
+            connectivity: "5G"
         ratings:
           type: array
           items:
@@ -82,9 +92,16 @@ components:
                 type: number
                 minimum: 0
                 maximum: 5
+                example: 4.8
               comment:
                 type: string
                 maxLength: 200
+                example: "Amazing performance and camera quality!"
+          example:
+            - score: 5
+              comment: "Best phone I've ever used!"
+            - score: 4.5
+              comment: "Great features, but a bit pricey."
 paths:
   /hello:
     get:
@@ -107,6 +124,22 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Product'
+            example:
+              name: "Apple iPhone 15 Pro"
+              description: "The latest Apple iPhone 15 Pro features a 6.1-inch Super Retina XDR display, A17 Pro chip, triple camera system, and all-day battery life."
+              price: 800.99
+              category: electronics
+              tags: ["smartphone", "apple", "ios"]
+              inStock: true
+              specifications:
+                color: "Natural Titanium"
+                storage: "256GB"
+                connectivity: "5G"
+              ratings:
+                - score: 5
+                  comment: "Best phone I've ever used!" 
+                - score: 4.5
+                  comment: "Great features, but a bit pricey."  
       responses:
         '201':
           description: Product created successfully
