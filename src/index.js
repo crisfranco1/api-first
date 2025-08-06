@@ -32,7 +32,7 @@ app.get('/v2/hello', (req, res) => {
     res.json({ message: 'Hello World', version: '2', timestamp: new Date().toISOString() });
 });
 
-app.post('/users', (req, res) => {
+app.post('/v1/users', (req, res) => {
     const { name, age, email } = req.body;
     const newUser = {
         id: Date.now().toString(),
@@ -50,7 +50,7 @@ const users = [
     { id: 3, name: 'Alice Garcia', age: 28, email: 'alice@example.com' }
 ];
 
-app.get('/users/:id', (req, res) => {
+app.get('/v1/users/:id', (req, res) => {
     const userId = parseInt(req.params.id);
     const user = users.find(u => u.id === userId);
     if (!user) {
@@ -63,7 +63,7 @@ app.get('/users/:id', (req, res) => {
 });
 
 
-app.put('/users/:id', (req, res) => {
+app.put('/v1/users/:id', (req, res) => {
     const userId = parseInt(req.params.id);
     const { name, age, email } = req.body;
     const userIndex = users.findIndex(u => u.id === userId);
@@ -100,7 +100,7 @@ let products = [
     }
 ];
 
-app.post('/products', (req, res) => {
+app.post('/v1/products', (req, res) => {
     const newProduct = {
         id: Date.now().toString(),
         ...req.body
@@ -109,11 +109,11 @@ app.post('/products', (req, res) => {
     res.status(201).json(newProduct);
 });
 
-app.get('/products', (req, res) => {
+app.get('/v1/products', (req, res) => {
     res.json(products);
 });
 
-app.get('/products/:id', (req, res) => {
+app.get('/v1/products/:id', (req, res) => {
     const product = products.find(p => p.id === req.params.id);
     if (!product) {
         return res.status(404).json({ message: 'Product not found' });
@@ -121,7 +121,7 @@ app.get('/products/:id', (req, res) => {
     res.json(product);
 });
 
-app.put('/products/:id', (req, res) => {
+app.put('/v1/products/:id', (req, res) => {
     const productIndex = products.findIndex(p => p.id === req.params.id);
     if (productIndex === -1) {
         return res.status(404).json({ message: 'Product not found' });
@@ -131,7 +131,7 @@ app.put('/products/:id', (req, res) => {
     res.json(updatedProduct);
 });
 
-app.delete('/products/:id', (req, res) => {
+app.delete('/v1/products/:id', (req, res) => {
     const productIndex = products.findIndex(p => p.id === req.params.id);
     if (productIndex === -1) {
         return res.status(404).json({ message: 'Product not found' });
