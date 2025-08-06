@@ -4,7 +4,10 @@ info:
   version: 1.0.0
   description: User management API
 servers: 
-  - url: http://localhost:3000
+  - url: http://localhost:3000/v1
+    description: Version 1 of the API
+  - url: http://localhost:3000/v2
+    description: Version 2 of the API
 components:
   schemas:
     HelloResponse:

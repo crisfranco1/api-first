@@ -24,8 +24,12 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.get('/hello', (req, res) => {
+app.get('/v1/hello', (req, res) => {
     res.json({ message: 'Hello World' });
+});
+
+app.get('/v2/hello', (req, res) => {
+    res.json({ message: 'Hello World', version: '2', timestamp: new Date().toISOString() });
 });
 
 app.post('/users', (req, res) => {
@@ -138,4 +142,6 @@ app.delete('/products/:id', (req, res) => {
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
+    console.log(`http://localhost:${port}/v1`);
+    console.log(`http://localhost:${port}/v2`);
 });
