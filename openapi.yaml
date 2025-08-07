@@ -102,7 +102,66 @@ components:
               comment: "Best phone I've ever used!"
             - score: 4.5
               comment: "Great features, but a bit pricey."
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token for authentication
+security:
+  - JWT: []
 paths:
+  /auth/login:
+    post:
+      tags:
+        - Users
+      summary: Authenticate user and return JWT
+      security: [] # This disables global security for this endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                  minLength: 6
+      responses:
+        '200':
+          description: JWT token returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT token for authentication
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIn0.abc123"
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      email:
+                        type: string
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
   /hello:
     get:
       summary: Hello World
@@ -118,6 +177,8 @@ paths:
       tags:
         - Products
       summary: Create a new product
+      security:
+        - JWT: []
       requestBody:
         required: true
         content:
@@ -200,6 +261,8 @@ paths:
       tags:
         - Products
       summary: Update product by ID
+      security:
+        - JWT: []
       parameters:
         - name: id
           in: path
@@ -232,6 +295,8 @@ paths:
       tags:
         - Products
       summary: Delete product by ID
+      security:
+        - JWT: []
       parameters:
         - name: id
           in: path
